@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+﻿import { useEffect, useMemo, useRef, useState } from 'react'
 
 
 
@@ -1512,7 +1512,7 @@ const pageTitle =
             : 'Manager Production Dashboard'
 
 
-  return <div className="workspace"><aside className="sidebar"><a className="side-brand" href="#home" onClick={(e) => e.preventDefault()}><span className="side-logo">{icon('gear')}</span><span><b>KINETIC GEARS</b><small>PRODUCTION SYSTEM</small></span></a><div className="side-label">WORKSPACE</div><button className={`nav-item${role === 'Supervisor' || managerPage === 'dashboard' ? ' active' : ''}`} onClick={() => { if (role === 'Manager') setManagerPage('dashboard') }}>{icon('grid')}<span>{role === 'Supervisor' ? 'Supervisor Home' : 'Production Dashboard'}</span></button>{role === 'Manager' && <button className={`nav-item${managerPage === 'machine-management' ? ' active' : ''}`} onClick={() => setManagerPage('machine-management')}>{icon('gear')}<span>Machine Management</span></button>}{role === 'Supervisor' && (
+  return <div className="workspace"><aside className="sidebar"><a className="side-brand" href="#home" onClick={(e) => e.preventDefault()}><span className="side-logo">{icon('gear')}</span><span><b>KINETIC GEARS</b><small>PRODUCTION SYSTEM</small></span></a><div className="side-label">WORKSPACE</div><button className={`nav-item${role === 'Supervisor' || managerPage === 'dashboard' ? ' active' : ''}`} onClick={() => setManagerPage('dashboard')}>{icon('grid')}<span>{role === 'Supervisor' ? 'Supervisor Home' : 'Production Dashboard'}</span></button>{role === 'Manager' && <button className={`nav-item${managerPage === 'machine-management' ? ' active' : ''}`} onClick={() => setManagerPage('machine-management')}>{icon('gear')}<span>Machine Management</span></button>}{role === 'Supervisor' && (
   <button
     className={`nav-item${managerPage === 'order-management' ? ' active' : ''}`}
     onClick={() => setManagerPage('order-management')}
@@ -1750,8 +1750,10 @@ const pageTitle =
         return 'Pending';
       });
       if (allPlansCompleted) {
-        stageStates.forEach((_, index) => {
-  if (index > 0 && stagePlans[index - 1] && isPlanDone(stagePlans[index - 1])) stageStates[index] = 'Completed';
+        stageStates.forEach((_state, index) => {
+  if (index > 0 && stagePlans[index - 1] && isPlanDone(stagePlans[index - 1])) {
+    stageStates[index] = 'Completed';
+  }
 });
       }
       return <>
