@@ -1751,8 +1751,8 @@ const pageTitle =
       });
       if (allPlansCompleted) {
         stageStates.forEach((state, index) => {
-          if (index > 0 && stagePlans[index - 1] && isPlanDone(stagePlans[index - 1])) stageStates[index] = 'Completed';
-        });
+  if (index > 0 && stagePlans[index - 1] && isPlanDone(stagePlans[index - 1])) stageStates[index] = 'Completed';
+});
       }
       return <>
         <div className="section-heading" style={{ marginTop: 28 }}>
