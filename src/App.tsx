@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 
 
@@ -46,6 +46,16 @@ type OrderRecord = {
   'Material Specification': string; 'Delivery Date': string;
   Priority: string; 'Order Status': string; Remarks: string;
 };
+const PROCESS_SEQUENCE_MAP: Record<string, number> = {
+  'Turning': 1,
+  'Gear Hobbing': 2,
+  'Gear Shaping': 3,
+  'Heat Treatment': 4,
+  'Grinding': 5,
+  'Quality Inspection': 6,
+  'Packing': 7,
+};
+
 type ProcessJourneyRecord = {
   Journey_ID: string;
   Order_ID: string;
@@ -762,7 +772,7 @@ useEffect(() => {
   const [planningOrderId, setPlanningOrderId] = useState('');
   const [planningProcess, setPlanningProcess] = useState('Turning');
   const [planningMachineId, setPlanningMachineId] = useState('');
-  const [planningSequence, setPlanningSequence] = useState('1');
+  const planningSequence = PROCESS_SEQUENCE_MAP[planningProcess] ?? '';
   const [planningQty, setPlanningQty] = useState('');
   const [progressJourneyId, setProgressJourneyId] = useState('');
   const [progressCompletedQty, setProgressCompletedQty] = useState('');
@@ -948,7 +958,7 @@ useEffect(() => {
     setProcessJourneyMessage('');
     const quantity = Number(planningQty);
     if (!planningOrderId || !planningProcess || !planningMachineId || !Number.isInteger(Number(planningSequence)) || Number(planningSequence) < 1 || !Number.isFinite(quantity) || quantity <= 0) {
-      setProcessJourneyMessage('Please select an order, process, machine and enter valid sequence and planned quantity.');
+      setProcessJourneyMessage('Please select an order, process and machine, and enter a valid planned quantity.');
       return;
     }
     setProcessJourneySaving(true);
@@ -972,7 +982,6 @@ useEffect(() => {
       }
       setProcessJourneys(await fetchBackendProcessJourney());
       setProcessJourneyMessage(`Production plan saved for ${planningOrderId}.`);
-      setPlanningSequence(String(Number(planningSequence) + 1));
       setPlanningQty('');
     } catch (error) {
       setProcessJourneyMessage(`Unable to save plan: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -1802,7 +1811,7 @@ const pageTitle =
           <option value="">Select active machine</option>
           {activeMachines.map((machine) => <option key={machine.id} value={machine.id}>{machine.id} — {machine.name}</option>)}
         </select></Field>
-        <Field label="Process Sequence"><input type="number" min="1" step="1" value={planningSequence} onChange={(event) => setPlanningSequence(event.target.value)} required /></Field>
+        <Field label="Automatic Sequence"><input type="number" value={planningSequence} readOnly aria-readonly="true" /></Field>
         <Field label="Planned Quantity"><input type="number" min="1" step="1" value={planningQty} onChange={(event) => setPlanningQty(event.target.value)} placeholder="Enter planned quantity" required /></Field>
       </div>
       <div className="form-actions"><button className="primary-button" type="submit" disabled={processJourneySaving}>{processJourneySaving ? 'Saving Plan…' : 'Save Production Plan'}</button></div>
