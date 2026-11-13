@@ -1750,7 +1750,7 @@ const pageTitle =
         return 'Pending';
       });
       if (allPlansCompleted) {
-        stageStates.forEach((state, index) => {
+        stageStates.forEach((_, index) => {
   if (index > 0 && stagePlans[index - 1] && isPlanDone(stagePlans[index - 1])) stageStates[index] = 'Completed';
 });
       }
